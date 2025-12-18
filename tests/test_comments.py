@@ -25,8 +25,16 @@ def client():
 
 
 def test_create_comment(client):
+    # create a task first
+    t = client.post(
+        "/tasks",
+        data=json.dumps({"title": "Task 1"}),
+        content_type="application/json"
+    )
+    tid = t.json["id"]
+
     response = client.post(
-        "/tasks/1/comments",
+        f"/tasks/{tid}/comments",
         data=json.dumps({"content": "Test comment"}),
         content_type="application/json"
     )
@@ -34,18 +42,32 @@ def test_create_comment(client):
 
 
 def test_get_comments(client):
+    t = client.post(
+        "/tasks",
+        data=json.dumps({"title": "Task 2"}),
+        content_type="application/json"
+    )
+    tid = t.json["id"]
+
     client.post(
-        "/tasks/1/comments",
+        f"/tasks/{tid}/comments",
         data=json.dumps({"content": "Another comment"}),
         content_type="application/json"
     )
-    response = client.get("/tasks/1/comments")
+    response = client.get(f"/tasks/{tid}/comments")
     assert response.status_code == 200
 
 
 def test_update_comment(client):
+    t = client.post(
+        "/tasks",
+        data=json.dumps({"title": "Task 3"}),
+        content_type="application/json"
+    )
+    tid = t.json["id"]
+
     post = client.post(
-        "/tasks/1/comments",
+        f"/tasks/{tid}/comments",
         data=json.dumps({"content": "Old"}),
         content_type="application/json"
     )
@@ -59,8 +81,15 @@ def test_update_comment(client):
 
 
 def test_delete_comment(client):
+    t = client.post(
+        "/tasks",
+        data=json.dumps({"title": "Task 4"}),
+        content_type="application/json"
+    )
+    tid = t.json["id"]
+
     post = client.post(
-        "/tasks/1/comments",
+        f"/tasks/{tid}/comments",
         data=json.dumps({"content": "Delete me"}),
         content_type="application/json"
     )
