@@ -3,7 +3,7 @@
  "builds": [
   {
    "src": "server.py",
-   "use": "@vercel/node",
+   "use": "@vercel/python",
    "config": { "includeFiles": ["dist/**"] }
   }
  ],
